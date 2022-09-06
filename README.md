@@ -2,15 +2,16 @@
 
 `libnss-github` is a database based backend for [GNU Libc Name Service Switch.](https://www.gnu.org/software/libc/manual/html_node/Name-Service-Switch.html)  It can get users and groups from a remote database. (currently implemented using the [Redis](https://redis.io/) protocol)
 
-This backend has been created for use cases where Linux users need to collaborate across multiple different organizations systems who decided to use a coordinated approach for UID/GID (for example High performance computing systems) 
+This backend has been created for use cases where Linux users need to collaborate across multiple different organizations who decided to use a coordinated approach for UID/GID (for example High performance computing systems). As there are about 100M Github users at this time and Github has public alphanumeric 'login' and numeric 'id' (for example https://api.github.com/users/jimmy) we can have our users create github accounts and assign the numberic id of their github account to their enterprise identity (out of scope of this project) 
 
-## Testing with Github users.
+## Using redis as a database 
 
-One way to show the performance of Redis is to use a large database. We brought up a Redis server using the kvrocks implementation of the redis protocol on the smallest possible Linode host (Nanode, 1GB RAM, 1 CPU, 25GB Flash, $5/month) in their Dallas datacenter (~ 50 ms latency from the pacific northwest west as well as the north east). The server hosts the usernames and numerical ids of about 17 million github users that have had public activity since 2020. The database is about 12GB and the overall disk consumption of the system is about 85% while 60% of the memory is used for the kvrocks database. We would like to use this database for the Name Service Switch
+Since 2020 there have been around 17 million github users with public activity which results in about 70 millon database entries (one each for user,uid,group,gid). 
+We brought up a Redis compatible server using the [kvrocks](https://kvrocks.apache.org/) implementation of the Redis protocol and used the smallest possible Linode host (Nanode, 1GB RAM, 1 CPU, 25GB Flash, $5/month) in their Dallas datacenter (~ 50 ms latency from the US Pacific Northwest as well as the Northeast). The database is about 12GB and the overall disk consumption of the system is about 85% while 60% of the memory is used by kvrocks.
 
 ### install 
 
-we are using Ubuntu 22.04 for this test and install the low level hiredis library and copy the binary libnss-github library to the right location. We compiled the credentials and hostname for the linode server compiled into the libnss library.  
+we are using Ubuntu 22.04 for this test and install the low level hiredis library and copy the binary `libnss-github` library to the right location. We compiled the credentials and hostname for the linode server compiled into the libnss library.  
 
 ```
 sudo apt install -y libhiredis0.14
@@ -20,7 +21,7 @@ sudo chmod 755 /usr/local/lib/libnss_github.so.2
 
 ### configure
 
-all we need to do is to add redis entries to the passwd and group services in nsswitch.conf, we insert these entries right behind the systemd entries. You might also find `compat`, ldap or `sssd` entries. Make sure that redis is the last entry. 
+All we need to do is to add `github` entries to the passwd and group services in nsswitch.conf, we insert these entries right behind the `systemd` entries. You might also find `compat`, ldap or `sssd` entries. Make sure that `github` is the last entry at the end of each line. You can execute this command to take care of the change on stock Ubuntu: 
 
 ```
 sudo sed -i -e "s/systemd/systemd github/g" /etc/nsswitch.conf
@@ -28,7 +29,7 @@ sudo sed -i -e "s/systemd/systemd github/g" /etc/nsswitch.conf
 
 ### Test
 
-First let's see how fast we can retrieve user info from the github database with 70M overall records. we query this directly on the redis/kvrocks server to avoid network latency 
+First let's see how fast we can retrieve user info from the github database with 70M overall records. we query this directly on the Redis/kvrocks server to avoid network latency 
 
 ```
 root@kvrocks:~# time getent passwd king
@@ -50,8 +51,7 @@ user    0m0.003s
 sys     0m0.000s
 ```
 
-the final test is from a system that is hooked up through a t-mobile hotspot and has 100-300ms latency
-
+The final test is from a system that is hooked up through a t-mobile hotspot and has 100-300ms latency
 
 ```
 dp@wsl:~$ time getent passwd jimsmith
@@ -74,9 +74,8 @@ edit config/header file `config.h`, install hiredis dependency, compile and inst
 sudo dnf install -y libhiredis-devel || \
   sudo apt install -y libhiredis-dev
 make clean && make && \
-  sudo rm /usr/lib/libnss_github.so.2 && \
-  sudo cp libnss_github.so.2 /usr/lib/ && \
-  sudo chmod 755 /usr/lib/libnss_github.so.2
+  sudo cp -f libnss_github.so.2 /usr/local/lib/ && \
+  sudo chmod 755 /usr/local/lib/libnss_github.so.2
 ```
 
 ### Redis database
@@ -95,8 +94,8 @@ There are examples in `.drone.yml` configuration file.
 With the following lines in `/etc/nsswitch.conf`
 
 ```
-passwd:         compat redis
-group:          compat redis
+passwd:         compat github
+group:          compat github
 shadow:         compat
 ```
 
@@ -108,7 +107,7 @@ shadow:         compat
 
 ##Security considerations
 
-Always use after compat in nsswitch.conf,
+Always use as last entry (after compat,systemd,sssd) in nsswitch.conf,
 otherwise it could overwrite the shadow-password for root.
 (shadow has no uids, so this cannot be ruled out)
 
