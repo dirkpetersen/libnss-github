@@ -38,7 +38,7 @@ pipeline:
     host: pippin.planet-work.net
     username: pkg
     source: ../*.deb
-    target: incoming-testing/libnss-redis/${DEBIAN_VERSION}
+    target: incoming-testing/libnss-github/${DEBIAN_VERSION}
     secrets: [ PLUGIN_KEY ]
     when:
       event: push
@@ -48,8 +48,8 @@ pipeline:
     host: pippin.planet-work.net
     username: pkg
     script:
-      - aptly repo remove debian-${DEBIAN_VERSION}-testing `aptly repo search debian-${DEBIAN_VERSION}-testing 'Name (~ libnss-redis.*)' | xargs` || true
-      - aptly repo add debian-${DEBIAN_VERSION}-testing incoming-testing/libnss-redis/${DEBIAN_VERSION} && aptly publish update ${DEBIAN_VERSION}-testing debian 
+      - aptly repo remove debian-${DEBIAN_VERSION}-testing `aptly repo search debian-${DEBIAN_VERSION}-testing 'Name (~ libnss-github.*)' | xargs` || true
+      - aptly repo add debian-${DEBIAN_VERSION}-testing incoming-testing/libnss-github/${DEBIAN_VERSION} && aptly publish update ${DEBIAN_VERSION}-testing debian 
     secrets: [ PLUGIN_KEY ]
     when:
       event: push
@@ -59,7 +59,7 @@ pipeline:
     host: pippin.planet-work.net
     username: pkg
     source: ../*.deb
-    target: incoming/libnss-redis/${DEBIAN_VERSION}
+    target: incoming/libnss-github/${DEBIAN_VERSION}
     secrets: [ PLUGIN_KEY ]
     when:
         event: tag
@@ -70,7 +70,7 @@ pipeline:
     host: pippin.planet-work.net
     username: pkg
     script:
-      - aptly repo add debian-${DEBIAN_VERSION} incoming/libnss-redis/${DEBIAN_VERSION} && aptly publish update ${DEBIAN_VERSION} debian 
+      - aptly repo add debian-${DEBIAN_VERSION} incoming/libnss-github/${DEBIAN_VERSION} && aptly publish update ${DEBIAN_VERSION} debian 
     secrets: [ PLUGIN_KEY ]
     when:
       event: tag
@@ -85,8 +85,8 @@ pipeline:
       - sed -i -e "s/6379/6380/" /etc/redis/redis.conf
       - echo "unixsocket /var/run/redis/redis-webconf.sock" >> /etc/redis/redis.conf
       - /etc/init.d/redis-server start && sleep 3
-      - apt-get -y --allow-unauthenticated install libnss-redis
-      - sed -i -e "s/compat/compat redis/g" /etc/nsswitch.conf
+      - apt-get -y --allow-unauthenticated install libnss-github
+      - sed -i -e "s/compat/compat github/g" /etc/nsswitch.conf
       - bash -x tests/setup-tests.sh
       - bash -x tests/run-tests.sh
     when:

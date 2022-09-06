@@ -1,4 +1,4 @@
-libnss-redis (0.1-1) UNRELEASED; urgency=medium
+libnss-github (0.1-1) UNRELEASED; urgency=medium
 
   [ Frédéric VANNIÈRE ]
   * Bugfix 
@@ -8,7 +8,7 @@ libnss-redis (0.1-1) UNRELEASED; urgency=medium
 
  -- root <root@200591939db7>  Thu, 01 Jun 2017 07:32:08 +0000
 
-libnss-redis (0.1-0) stable; urgency=low
+libnss-github (0.1-0) stable; urgency=low
 
   * Initial version
 

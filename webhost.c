@@ -15,10 +15,10 @@
 
 #include "webhost.h"
 
-enum nss_status _nss_redis_setwebhostent(void);
-enum nss_status _nss_redis_endwebhostent(void);
-enum nss_status _nss_redis_getwebhostbyname_r(const char *, struct webhost *, char *, size_t, int *);
-enum nss_status _nss_redis_getwebhostent_r(struct webhost *wh, char *buffer, size_t buflen, int *errnop);
+enum nss_status _nss_github_setwebhostent(void);
+enum nss_status _nss_github_endwebhostent(void);
+enum nss_status _nss_github_getwebhostbyname_r(const char *, struct webhost *, char *, size_t, int *);
+enum nss_status _nss_github_getwebhostent_r(struct webhost *wh, char *buffer, size_t buflen, int *errnop);
 
 static enum nss_status w_search(const char *host, struct webhost *wh, int *errnop, char *buffer, size_t buflen);
 
@@ -80,7 +80,7 @@ static inline enum nss_status w_search(const char *host, struct webhost *wh, int
 	return NSS_STATUS_SUCCESS;
 }
 
-enum nss_status _nss_redis_getwebhostbyname_r(const char *name, struct webhost *result, char *buf, size_t buflen, int *errnop) {
+enum nss_status _nss_github_getwebhostbyname_r(const char *name, struct webhost *result, char *buf, size_t buflen, int *errnop) {
 	*errnop = 0;
 	if (result)
 		return w_search(name, result, errnop, buf, buflen);
@@ -88,17 +88,17 @@ enum nss_status _nss_redis_getwebhostbyname_r(const char *name, struct webhost *
 		return NSS_STATUS_UNAVAIL;
 }
 
-enum nss_status _nss_redis_setwebhostent(void) {
-	printf("_nss_redis_setpwent\n");
+enum nss_status _nss_github_setwebhostent(void) {
+	printf("_nss_github_setpwent\n");
 	return NSS_STATUS_SUCCESS;
 }
 
-enum nss_status _nss_redis_endwebhostent(void) {
-	printf("_nss_redis_endpwent\n");
+enum nss_status _nss_github_endwebhostent(void) {
+	printf("_nss_github_endpwent\n");
 	return NSS_STATUS_SUCCESS;
 }
 
-enum nss_status _nss_redis_getwebhostent_r(struct webhost *wh, char *buffer, size_t buflen, int *errnop) {
+enum nss_status _nss_github_getwebhostent_r(struct webhost *wh, char *buffer, size_t buflen, int *errnop) {
 	*errnop = -1;
 
 	// Not yet implemented

@@ -10,11 +10,11 @@
 
 #include "webhost.h"
 
-enum nss_status _nss_redis_getpwuid_r(uid_t uid, struct passwd *result, char *buf, size_t buflen, int *errnop);
-enum nss_status _nss_redis_getpwnam_r(const char *name, struct passwd *result, char *buf, size_t buflen, int *errnop);
-enum nss_status _nss_redis_getgrnam_r(const char *name, struct group *gr, char *buffer, size_t buflen, int *errnop);
-enum nss_status _nss_redis_getgrgid_r(const gid_t gid, struct group *gr, char *buffer, size_t buflen, int *errnop);
-enum nss_status _nss_redis_getwebhostbyname_r(const char *name, struct webhost *result, char *buf, size_t buflen, int *errnop);
+enum nss_status _nss_github_getpwuid_r(uid_t uid, struct passwd *result, char *buf, size_t buflen, int *errnop);
+enum nss_status _nss_github_getpwnam_r(const char *name, struct passwd *result, char *buf, size_t buflen, int *errnop);
+enum nss_status _nss_github_getgrnam_r(const char *name, struct group *gr, char *buffer, size_t buflen, int *errnop);
+enum nss_status _nss_github_getgrgid_r(const gid_t gid, struct group *gr, char *buffer, size_t buflen, int *errnop);
+enum nss_status _nss_github_getwebhostbyname_r(const char *name, struct webhost *result, char *buf, size_t buflen, int *errnop);
 
 int main(void) {
 	char *data = malloc(1000);
@@ -72,7 +72,7 @@ int main(void) {
 	unsetenv("TENANT");
 	setenv("TENANT", "tenant1", 1);
 
-    _nss_redis_getpwnam_r("testuser", pw, data, 1000, &errnop);
+    _nss_github_getpwnam_r("testuser", pw, data, 1000, &errnop);
     assert(strcmp(pw->pw_name, "testuser") == 0);
 	assert(strcmp(pw->pw_passwd, "x") == 0);
 	assert(pw->pw_uid == 12345);
@@ -82,7 +82,7 @@ int main(void) {
 	assert(strcmp(pw->pw_shell, "/bin/false") == 0);
 
 
-	_nss_redis_getpwuid_r(12345, pw, data, 1000, &errnop);
+	_nss_github_getpwuid_r(12345, pw, data, 1000, &errnop);
     assert(strcmp(pw->pw_name, "testuser") == 0);
 	assert(strcmp(pw->pw_passwd, "x") == 0);
 	assert(pw->pw_uid == 12345);
@@ -134,14 +134,14 @@ int main(void) {
 	unsetenv("TENANT");
 	setenv("TENANT", "tenant1", 1);
 
-    _nss_redis_getgrnam_r("testgroup", gr, data, 1000, &errnop);
+    _nss_github_getgrnam_r("testgroup", gr, data, 1000, &errnop);
     assert(strcmp(gr->gr_name, "testgroup") == 0);
 	assert(strcmp(gr->gr_passwd, "x") == 0);
 	assert(gr->gr_gid == 54321);
 	assert(strcmp(gr->gr_mem[0],"www-data") == 0);
 
 
-	_nss_redis_getgrgid_r(54321, gr, data, 1000, &errnop);
+	_nss_github_getgrgid_r(54321, gr, data, 1000, &errnop);
     assert(strcmp(gr->gr_name, "testgroup") == 0);
 	assert(strcmp(gr->gr_passwd, "x") == 0);
 	assert(gr->gr_gid == 54321);
@@ -168,7 +168,7 @@ int main(void) {
 	unsetenv("TENANT");
 	setenv("TENANT", "tenant1", 1);
 
-    _nss_redis_getwebhostbyname_r("website.com", wh, data, 1000, &errnop);
+    _nss_github_getwebhostbyname_r("website.com", wh, data, 1000, &errnop);
 	printf("RESULT={ wh_name=%s, wh_vhost=%s, wh_user=%s, wh_dir=%s, wh_db_socket=%s, wh_php_mode=%s, wh_php_config=%s }\n",
 			wh->wh_name,
 			wh->wh_vhost,

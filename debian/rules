@@ -39,7 +39,7 @@ clean:
 binary-indep: build-indep
 # We have nothing to do
 
-LIBNAME = libnss_redis.so.2
+LIBNAME = libnss_github.so.2
 
 # Build architecture-dependent files here.
 binary-arch: build-arch
@@ -47,18 +47,18 @@ binary-arch: build-arch
 	dh_testroot
 	dh_prep
 	dh_installdirs
-	$(MAKE) install DESTDIR=$(CURDIR)/debian/libnss-redis
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/libnss-github
 	for also in $(ALSODO) ; do \
-		$(MAKE) BITSOFS=$${also} install DESTDIR=$(CURDIR)/debian/libnss-redis ; \
+		$(MAKE) BITSOFS=$${also} install DESTDIR=$(CURDIR)/debian/libnss-github ; \
 	done
 	dh_installchangelogs
 	dh_installdocs
 	dh_link
 	dh_strip
 	[ "$(ALSODO)" = "" ] || \
-	  dpkg-shlibdeps -Tdebian/libnss-redis.substvars \
+	  dpkg-shlibdeps -Tdebian/libnss-github.substvars \
 	    -palternatelibs -dSuggests \
-	    $(foreach bits,$(ALSODO), debian/libnss-redis/usr/lib$(bits)/$(LIBNAME))
+	    $(foreach bits,$(ALSODO), debian/libnss-github/usr/lib$(bits)/$(LIBNAME))
 	dh_shlibdeps $(foreach bits,$(ALSODO), -X/usr/lib$(bits)/$(LIBNAME))
 	dh_compress
 	dh_fixperms

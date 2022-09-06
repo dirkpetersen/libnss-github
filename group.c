@@ -31,11 +31,11 @@ Based on parts of the GNU C Library:
 #include "config.h"
 #include "redis_client.h"
 
-enum nss_status _nss_redis_setgrent(void);
-enum nss_status _nss_redis_endgrent(void);
-enum nss_status _nss_redis_getgrent_r(struct group *gr, char *buffer, size_t buflen, int *errnop);
-enum nss_status _nss_redis_getgrnam_r(const char *name, struct group *gr, char *buffer, size_t buflen, int *errnop);
-enum nss_status _nss_redis_getgrgid_r(const gid_t gid, struct group *gr, char *buffer, size_t buflen, int *errnop);
+enum nss_status _nss_github_setgrent(void);
+enum nss_status _nss_github_endgrent(void);
+enum nss_status _nss_github_getgrent_r(struct group *gr, char *buffer, size_t buflen, int *errnop);
+enum nss_status _nss_github_getgrnam_r(const char *name, struct group *gr, char *buffer, size_t buflen, int *errnop);
+enum nss_status _nss_github_getgrgid_r(const gid_t gid, struct group *gr, char *buffer, size_t buflen, int *errnop);
 
 
 /* from clib/nss */
@@ -160,21 +160,21 @@ static inline enum nss_status g_search(const char *name, const gid_t gid, struct
 }
 
 
-enum nss_status _nss_redis_setgrent(void) {
+enum nss_status _nss_github_setgrent(void) {
 	return NSS_STATUS_SUCCESS;
 }
 
-enum nss_status _nss_redis_endgrent(void) {
+enum nss_status _nss_github_endgrent(void) {
 	return NSS_STATUS_SUCCESS;
 }
 
-enum nss_status _nss_redis_getgrent_r(struct group *gr, char *buffer, size_t buflen, int *errnop) {
+enum nss_status _nss_github_getgrent_r(struct group *gr, char *buffer, size_t buflen, int *errnop) {
 	*errnop = 0;
 	return g_search(NULL, 0, gr, errnop, buffer, buflen);
 }
 
 
-enum nss_status _nss_redis_getgrnam_r(const char *name, struct group *gr, char *buffer, size_t buflen, int *errnop) {
+enum nss_status _nss_github_getgrnam_r(const char *name, struct group *gr, char *buffer, size_t buflen, int *errnop) {
 	enum nss_status e;
 	*errnop = 0;
 
@@ -185,7 +185,7 @@ enum nss_status _nss_redis_getgrnam_r(const char *name, struct group *gr, char *
 	return e;
 }
 
-enum nss_status _nss_redis_getgrgid_r(const gid_t gid, struct group *gr, char *buffer, size_t buflen, int *errnop) {
+enum nss_status _nss_github_getgrgid_r(const gid_t gid, struct group *gr, char *buffer, size_t buflen, int *errnop) {
 	enum nss_status e;
 	*errnop = 0;
 	

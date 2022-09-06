@@ -1,4 +1,4 @@
-# Makefile for nss-redis
+# Makefile for nss-github
 
 CC = gcc 
 prefix = /usr
@@ -6,8 +6,8 @@ exec_prefix = ${prefix}
 libprefix = ${exec_prefix}/lib
 DESTDIR=
 OBJECTS=shadow.o passwd.o group.o webhost.o redis_client.o  
-SHARED_OBJECT = libnss_redis$(BITSOFS).so.2
-INSTALL_NAME = libnss_redis.so.2
+SHARED_OBJECT = libnss_github$(BITSOFS).so.2
+INSTALL_NAME = libnss_github.so.2
 # This only works sometimes, give manually when needed:
 CFLAGS = -g -Wall -Wstrict-prototypes -Wpointer-arith -Wmissing-prototypes  -D_FORTIFY_SOURCE=2\
 		 -Wformat -Werror=format-security -Wall \
@@ -39,10 +39,10 @@ clean:
 distclean: clean
 
 dist: Makefile README config.h $(patsubst %.o,%.c,$(OBJECTS))
-	mkdir libnss-redis-$(VERSION)
-	install -m 644 $^ libnss-redis-$(VERSION)
-	tar -cvvzf libnss-redis_$(VERSION).orig.tar.gz libnss-redis-$(VERSION)
-	rm -r libnss-redis-$(VERSION) 
+	mkdir libnss-github-$(VERSION)
+	install -m 644 $^ libnss-github-$(VERSION)
+	tar -cvvzf libnss-github_$(VERSION).orig.tar.gz libnss-github-$(VERSION)
+	rm -r libnss-github-$(VERSION) 
 
 test: test.o redis_client.o
 	$(CC) $(CFLAGS) $(LDFLAGS) -o test redis_client.o test.o passwd.o group.o webhost.o $(LIBS)

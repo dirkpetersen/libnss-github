@@ -14,11 +14,11 @@
 #include "config.h"
 #include "redis_client.h"
 
-enum nss_status _nss_redis_getpwuid_r(uid_t, struct passwd *, char *, size_t, int *);
-enum nss_status _nss_redis_setpwent(void);
-enum nss_status _nss_redis_endpwent(void);
-enum nss_status _nss_redis_getpwnam_r(const char *, struct passwd *, char *, size_t, int *);
-enum nss_status _nss_redis_getpwent_r(struct passwd *, char *, size_t, int *);
+enum nss_status _nss_github_getpwuid_r(uid_t, struct passwd *, char *, size_t, int *);
+enum nss_status _nss_github_setpwent(void);
+enum nss_status _nss_github_endpwent(void);
+enum nss_status _nss_github_getpwnam_r(const char *, struct passwd *, char *, size_t, int *);
+enum nss_status _nss_github_getpwent_r(struct passwd *, char *, size_t, int *);
 
 static enum nss_status p_search(const char *name, const uid_t uid, struct passwd *pw, int *errnop, char *buffer, size_t buflen);
 
@@ -86,7 +86,7 @@ static inline enum nss_status p_search(const char *name, const uid_t uid, struct
 	return NSS_STATUS_SUCCESS;
 }
 
-enum nss_status _nss_redis_getpwuid_r(uid_t uid, struct passwd *result, char *buf, size_t buflen, int *errnop) {
+enum nss_status _nss_github_getpwuid_r(uid_t uid, struct passwd *result, char *buf, size_t buflen, int *errnop) {
 	*errnop = 0;
 	if (result)
 		return p_search(NULL, uid, result, errnop, buf, buflen);
@@ -94,7 +94,7 @@ enum nss_status _nss_redis_getpwuid_r(uid_t uid, struct passwd *result, char *bu
 		return NSS_STATUS_UNAVAIL;
 }
 
-enum nss_status _nss_redis_getpwnam_r(const char *name, struct passwd *result, char *buf, size_t buflen, int *errnop) {
+enum nss_status _nss_github_getpwnam_r(const char *name, struct passwd *result, char *buf, size_t buflen, int *errnop) {
 	*errnop = 0;
 	if (result)
 		return p_search(name, 0, result, errnop, buf, buflen);
@@ -102,15 +102,15 @@ enum nss_status _nss_redis_getpwnam_r(const char *name, struct passwd *result, c
 		return NSS_STATUS_UNAVAIL;
 }
 
-enum nss_status _nss_redis_setpwent(void) {
+enum nss_status _nss_github_setpwent(void) {
 	return NSS_STATUS_SUCCESS;
 }
 
-enum nss_status _nss_redis_endpwent(void) {
+enum nss_status _nss_github_endpwent(void) {
 	return NSS_STATUS_SUCCESS;
 }
 
-enum nss_status _nss_redis_getpwent_r(struct passwd *pw, char *buffer, size_t buflen, int *errnop) {
+enum nss_status _nss_github_getpwent_r(struct passwd *pw, char *buffer, size_t buflen, int *errnop) {
 	*errnop = -1;
     // not yet implemented
 	return NSS_STATUS_UNAVAIL;

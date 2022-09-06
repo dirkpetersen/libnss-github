@@ -31,14 +31,14 @@ Based on parts of the GNU C Library:
 
 #include "config.h"
 
-enum nss_status _nss_redis_getspent_r(struct spwd *, char *, size_t, int *);
-enum nss_status _nss_redis_getspnam_r(const char *, struct spwd *, char *, size_t, int *);
-enum nss_status _nss_redis_setspent(void);
-enum nss_status _nss_redis_endspent(void);
+enum nss_status _nss_github_getspent_r(struct spwd *, char *, size_t, int *);
+enum nss_status _nss_github_getspnam_r(const char *, struct spwd *, char *, size_t, int *);
+enum nss_status _nss_github_setspent(void);
+enum nss_status _nss_github_endspent(void);
 
 static enum nss_status shadow_search(const char *name, struct spwd *spw, char *buffer, size_t buflen, int *errnop);
 
-enum nss_status _nss_redis_getspnam_r(const char *name, struct spwd *spw, char *buffer, size_t buflen, int *errnop) {
+enum nss_status _nss_github_getspnam_r(const char *name, struct spwd *spw, char *buffer, size_t buflen, int *errnop) {
 	enum nss_status s;
 
 	if (spw == NULL || name == NULL)
@@ -51,15 +51,15 @@ enum nss_status _nss_redis_getspnam_r(const char *name, struct spwd *spw, char *
 	return s;
 }
 
-enum nss_status _nss_redis_setspent(void) {
+enum nss_status _nss_github_setspent(void) {
 	return NSS_STATUS_SUCCESS;
 }
 
-enum nss_status _nss_redis_endspent(void) {
+enum nss_status _nss_github_endspent(void) {
 	return NSS_STATUS_SUCCESS;
 }
 
-enum nss_status _nss_redis_getspent_r(struct spwd *spw, char *buffer, size_t buflen, int *errnop) {
+enum nss_status _nss_github_getspent_r(struct spwd *spw, char *buffer, size_t buflen, int *errnop) {
 	enum nss_status s;
 
 	if (spw == NULL) {

@@ -1,8 +1,8 @@
-# libnss_redis
+# libnss_github
 
-`libnss-redis` is a [Redis](https://redis.io/) dabatase backend for[GNU Libc Name Service Switch.](https://www.gnu.org/software/libc/manual/html_node/Name-Service-Switch.html)  It can get users and groups from a remote database.
+`libnss-github` is a database based backend for [GNU Libc Name Service Switch.](https://www.gnu.org/software/libc/manual/html_node/Name-Service-Switch.html)  It can get users and groups from a remote database. (currently implemented using the [Redis](https://redis.io/) protocol)
 
-This backend has been created for mass web hosting with dynamic configuration.
+This backend has been created for use cases where Linux users need to collaborate across multiple different organizations systems who decided to use a coordinated approach for UID/GID (for example High performance computing systems) 
 
 ## Testing with Github users.
 
@@ -10,12 +10,12 @@ One way to show the performance of Redis is to use a large database. We brought 
 
 ### install 
 
-we are using Ubuntu 22.04 for this test and install the low level hiredis library and copy the binary libnss-redis library to the right location. We compiled the credentials and hostname for the linode server compiled into the libnss library.  
+we are using Ubuntu 22.04 for this test and install the low level hiredis library and copy the binary libnss-github library to the right location. We compiled the credentials and hostname for the linode server compiled into the libnss library.  
 
 ```
 sudo apt install -y libhiredis0.14
-sudo cp bin/ubuntu-22.04/libnss_redis.so.2 /usr/local/lib/
-sudo chmod 755 /usr/local/lib/libnss_redis.so.2
+sudo cp bin/ubuntu-22.04/libnss_github.so.2 /usr/local/lib/
+sudo chmod 755 /usr/local/lib/libnss_github.so.2
 ```
 
 ### configure
@@ -23,7 +23,7 @@ sudo chmod 755 /usr/local/lib/libnss_redis.so.2
 all we need to do is to add redis entries to the passwd and group services in nsswitch.conf, we insert these entries right behind the systemd entries. You might also find `compat`, ldap or `sssd` entries. Make sure that redis is the last entry. 
 
 ```
-sudo sed -i -e "s/systemd/systemd redis/g" /etc/nsswitch.conf
+sudo sed -i -e "s/systemd/systemd github/g" /etc/nsswitch.conf
 ```
 
 ### Test
@@ -66,7 +66,7 @@ We could dramatically reduce this latency with a tiered / cached architecture wh
 
 ## Classic compile / install 
 
-### build libnss-redis
+### build libnss-github
 
 edit config/header file `config.h`, install hiredis dependency, compile and install:
 
@@ -74,9 +74,9 @@ edit config/header file `config.h`, install hiredis dependency, compile and inst
 sudo dnf install -y libhiredis-devel || \
   sudo apt install -y libhiredis-dev
 make clean && make && \
-  sudo rm /usr/lib/libnss_redis.so.2 && \
-  sudo cp libnss_redis.so.2 /usr/lib/ && \
-  sudo chmod 755 /usr/lib/libnss_redis.so.2
+  sudo rm /usr/lib/libnss_github.so.2 && \
+  sudo cp libnss_github.so.2 /usr/lib/ && \
+  sudo chmod 755 /usr/lib/libnss_github.so.2
 ```
 
 ### Redis database
