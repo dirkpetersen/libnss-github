@@ -15,8 +15,8 @@ we are using Ubuntu 22.04 for this test and install the low level hiredis librar
 
 ```
 sudo apt install -y libhiredis0.14
-sudo cp bin/ubuntu-22.04/libnss_github.so.2 /usr/local/lib/
-sudo chmod 755 /usr/local/lib/libnss_github.so.2
+sudo cp -f bin/ubuntu-22.04/libnss_github.so.2 /usr/lib/
+sudo chmod 755 /usr/lib/libnss_github.so.2
 ```
 
 ### configure
@@ -73,9 +73,9 @@ edit config/header file `config.h`, install hiredis dependency, compile and inst
 ```
 sudo dnf install -y libhiredis-devel || \
   sudo apt install -y libhiredis-dev
-make clean && make && \
-  sudo cp -f libnss_github.so.2 /usr/local/lib/ && \
-  sudo chmod 755 /usr/local/lib/libnss_github.so.2
+sudo rm /usr/lib/libnss_github.so.2; \
+  make clean && make && \
+  sudo make install
 ```
 
 ### Redis database
